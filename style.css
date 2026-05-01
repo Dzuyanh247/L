@@ -1,7 +1,7 @@
 :root {
-  --bg-1: #08010f;
+  --bg-1: #07010f;
   --bg-2: #160321;
-  --bg-3: #2a083b;
+  --bg-3: #31104f;
   --neon-pink: #ff3ea5;
   --neon-soft: #ff85c8;
   --text: #ffe8f6;
@@ -26,33 +26,31 @@ body {
 .container {
   position: relative;
   z-index: 2;
-  width: min(92vw, 700px);
+  width: min(92vw, 760px);
   text-align: center;
   padding: 1.25rem;
 }
 
 .title {
-  font-size: clamp(1.4rem, 4vw, 2.5rem);
+  font-size: clamp(1.4rem, 4vw, 2.6rem);
   text-shadow: 0 0 8px rgba(255, 62, 165, 0.8), 0 0 18px rgba(255, 62, 165, 0.6);
   margin-bottom: 1.2rem;
 }
 
 .controls {
   display: flex;
-  gap: 0.75rem;
   justify-content: center;
-  flex-wrap: wrap;
 }
 
 .btn {
   border: 1px solid rgba(255, 133, 200, 0.7);
   background: rgba(20, 5, 35, 0.75);
   color: var(--text);
-  padding: 0.65rem 1rem;
+  padding: 0.7rem 1.2rem;
   border-radius: 999px;
   cursor: pointer;
   font-size: 1rem;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
   box-shadow: 0 0 8px rgba(255, 62, 165, 0.35);
 }
 
@@ -63,14 +61,22 @@ body {
   outline: none;
 }
 
+.btn:disabled {
+  opacity: 0.9;
+  cursor: default;
+}
+
 .heart-section {
-  margin-top: 2rem;
-  height: 220px;
+  margin-top: 1.8rem;
+  min-height: 400px;
   display: grid;
-  place-items: center;
+  justify-items: center;
+  align-content: start;
+  gap: 1.2rem;
   opacity: 1;
   transform: scale(1);
   transition: opacity 0.6s ease, transform 0.6s ease;
+  position: relative;
 }
 
 .hidden {
@@ -81,22 +87,28 @@ body {
 
 .heart-glow {
   position: absolute;
-  width: 190px;
-  height: 190px;
+  top: 0.6rem;
+  width: clamp(180px, 27vw, 240px);
+  aspect-ratio: 1;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 62, 165, 0.35), transparent 70%);
-  filter: blur(8px);
+  background: radial-gradient(circle, rgba(255, 62, 165, 0.4), transparent 68%);
+  filter: blur(10px);
   animation: glowPulse 1.8s ease-in-out infinite;
 }
 
-/* Heart made from one square and two circles */
 .heart {
+  --heart-size: clamp(90px, 15vw, 130px);
   position: relative;
-  width: 120px;
-  height: 120px;
-  background: var(--neon-pink);
+  margin-top: 1.5rem;
+  width: var(--heart-size);
+  height: var(--heart-size);
+  background: linear-gradient(145deg, #ff72c3, #ff2a97);
   transform: rotate(45deg);
-  box-shadow: 0 0 12px var(--neon-pink), 0 0 30px var(--neon-pink), 0 0 55px rgba(255, 62, 165, 0.7);
+  border-radius: 12%;
+  box-shadow:
+    0 0 15px rgba(255, 62, 165, 0.9),
+    0 0 35px rgba(255, 62, 165, 0.75),
+    0 0 65px rgba(255, 62, 165, 0.5);
   animation: heartbeat 1.2s ease-in-out infinite;
 }
 
@@ -104,18 +116,77 @@ body {
 .heart::after {
   content: "";
   position: absolute;
-  width: 120px;
-  height: 120px;
+  width: var(--heart-size);
+  height: var(--heart-size);
+  background: inherit;
   border-radius: 50%;
-  background: var(--neon-pink);
 }
 
 .heart::before {
-  left: -60px;
+  left: calc(var(--heart-size) * -0.5);
+  top: 0;
 }
 
 .heart::after {
-  top: -60px;
+  left: 0;
+  top: calc(var(--heart-size) * -0.5);
+}
+
+.question-wrap {
+  position: relative;
+  width: min(92vw, 540px);
+  margin-top: 1rem;
+  padding: 1.2rem;
+  border-radius: 18px;
+  background: rgba(11, 2, 23, 0.5);
+  border: 1px solid rgba(255, 133, 200, 0.25);
+  backdrop-filter: blur(2px);
+  transition: opacity 0.35s ease;
+}
+
+.question-text {
+  font-size: clamp(1.1rem, 2.8vw, 1.4rem);
+  margin-bottom: 1rem;
+}
+
+.answer-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 0.8rem;
+  position: relative;
+}
+
+.btn-yes {
+  background: rgba(20, 5, 35, 0.92);
+}
+
+.btn-no {
+  position: fixed;
+  z-index: 10;
+}
+
+.success-message {
+  min-height: 1.8rem;
+  margin-top: 0.9rem;
+  color: #ffd2eb;
+  text-shadow: 0 0 10px rgba(255, 157, 214, 0.75);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.success-message.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.float-heart {
+  position: fixed;
+  font-size: 1.1rem;
+  pointer-events: none;
+  animation: floatLove 1.5s ease forwards;
+  z-index: 30;
+  filter: drop-shadow(0 0 8px rgba(255, 105, 180, 0.8));
 }
 
 .particles,
@@ -157,8 +228,8 @@ body {
 }
 
 @keyframes glowPulse {
-  0%, 100% { transform: scale(0.95); opacity: 0.75; }
-  50% { transform: scale(1.1); opacity: 1; }
+  0%, 100% { transform: scale(0.95); opacity: 0.72; }
+  50% { transform: scale(1.12); opacity: 1; }
 }
 
 @keyframes floatUp {
@@ -178,18 +249,23 @@ body {
   50% { opacity: 1; transform: scale(1.5); }
 }
 
-@media (max-width: 480px) {
+@keyframes floatLove {
+  0% { transform: translateY(0) scale(0.8); opacity: 0; }
+  20% { opacity: 1; }
+  100% { transform: translateY(-85px) scale(1.4); opacity: 0; }
+}
+
+@media (max-width: 600px) {
   .heart-section {
-    height: 180px;
+    min-height: 350px;
   }
 
-  .heart,
-  .heart::before,
-  .heart::after {
-    width: 95px;
-    height: 95px;
+  .question-wrap {
+    padding: 1rem;
   }
 
-  .heart::before { left: -47.5px; }
-  .heart::after { top: -47.5px; }
+  .btn {
+    padding: 0.66rem 1.05rem;
+    font-size: 0.95rem;
+  }
 }

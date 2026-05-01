@@ -1,133 +1,111 @@
 const starsLayer = document.getElementById("starsLayer");
 const heartsLayer = document.getElementById("heartsLayer");
-const shootingLayer = document.getElementById("shootingLayer");
+const openGiftBtn = document.getElementById("openGiftBtn");
+const giftContent = document.getElementById("giftContent");
 const noBtn = document.getElementById("noBtn");
 const yesBtn = document.getElementById("yesBtn");
 const resultText = document.getElementById("resultText");
-const heartStage = document.getElementById("mainHeartStage");
-const questionCard = document.getElementById("questionCard");
-const buttonsWrap = document.getElementById("buttonsWrap");
+const heartWrapper = document.getElementById("heartWrapper");
 
-function makeStars(total = 95) {
-  for (let i = 0; i < total; i++) {
-    const s = document.createElement("span");
-    s.className = "star";
-    s.style.left = `${Math.random() * 100}%`;
-    s.style.top = `${Math.random() * 100}%`;
-    s.style.setProperty("--dur", `${2 + Math.random() * 4}s`);
-    starsLayer.appendChild(s);
+function makeStars(total = 70) {
+  for (let i = 0; i < total; i += 1) {
+    const star = document.createElement("span");
+    star.className = "star";
+    star.style.left = `${Math.random() * 100}vw`;
+    star.style.top = `${Math.random() * 100}vh`;
+    star.style.setProperty("--dur", `${2 + Math.random() * 4}s`);
+    starsLayer.appendChild(star);
   }
 }
 
-function makeFloatingHearts(total = 28) {
-  for (let i = 0; i < total; i++) {
+function makeFloatingHearts(total = 18) {
+  for (let i = 0; i < total; i += 1) {
     const h = document.createElement("span");
-    h.className = "mini-heart";
+    h.className = "floating-heart";
     h.textContent = Math.random() > 0.5 ? "❤" : "♥";
-    h.style.left = `${Math.random() * 100}%`;
-    h.style.top = `${75 + Math.random() * 35}%`;
-    h.style.setProperty("--size", `${12 + Math.random() * 16}px`);
-    h.style.setProperty("--dur", `${7 + Math.random() * 10}s`);
-    h.style.animationDelay = `${Math.random() * 9}s`;
+    h.style.left = `${Math.random() * 100}vw`;
+    h.style.top = `${70 + Math.random() * 35}vh`;
+    h.style.setProperty("--size", `${8 + Math.random() * 10}px`);
+    h.style.setProperty("--dur", `${8 + Math.random() * 7}s`);
+    h.style.animationDelay = `${Math.random() * 7}s`;
     heartsLayer.appendChild(h);
   }
 }
 
-function spawnSpark() {
-  const spark = document.createElement("span");
-  spark.className = "spark";
-  spark.style.left = `${Math.random() * 85}%`;
-  spark.style.top = `${Math.random() * 70}%`;
-  spark.style.setProperty("--len", `${70 + Math.random() * 100}px`);
-  spark.style.setProperty("--dur", `${1.5 + Math.random() * 1.3}s`);
-  spark.style.setProperty("--angle", `${-25 + Math.random() * 18}deg`);
-  shootingLayer.appendChild(spark);
-  setTimeout(() => spark.remove(), 2800);
+function randomBetween(min, max) {
+  return Math.random() * (max - min) + min;
 }
 
-setInterval(spawnSpark, 1900);
+function moveNoButton(event) {
+  if (event) event.preventDefault();
+  const rect = noBtn.getBoundingClientRect();
+  const minX = 20;
+  const minY = 20;
+  const maxX = Math.max(minX, window.innerWidth - rect.width - 20);
+  const maxY = Math.max(minY, window.innerHeight - rect.height - 20);
+  const x = randomBetween(minX, maxX);
+  const y = randomBetween(minY, maxY);
 
-function moveNoButton() {
-  const wrapRect = buttonsWrap.getBoundingClientRect();
-  const btnRect = noBtn.getBoundingClientRect();
-  const pad = 8;
-
-  const minX = pad;
-  const maxX = wrapRect.width - btnRect.width - pad;
-  const minY = pad;
-  const maxY = wrapRect.height - btnRect.height - pad;
-
-  const x = Math.max(minX, Math.min(maxX, Math.random() * maxX));
-  const y = Math.max(minY, Math.min(maxY, Math.random() * maxY));
-
-  noBtn.classList.remove("wiggle");
-  void noBtn.offsetWidth;
-  noBtn.classList.add("wiggle");
+  noBtn.style.position = "fixed";
+  noBtn.style.left = `${x}px`;
+  noBtn.style.top = `${y}px`;
+  noBtn.style.transform = "translate3d(0,0,0)";
+  noBtn.style.zIndex = "20";
+  noBtn.style.transition = "top 220ms ease, left 220ms ease, transform 220ms ease";
 
   setTimeout(() => {
-    noBtn.style.position = "absolute";
-    noBtn.style.left = `${x}px`;
-    noBtn.style.top = `${y}px`;
-  }, 180);
+    noBtn.style.position = "";
+    noBtn.style.left = "";
+    noBtn.style.top = "";
+    noBtn.style.zIndex = "";
+    noBtn.style.transition = "";
+  }, 360);
 }
 
-["mouseenter", "click", "touchstart"].forEach((evt) => {
-  noBtn.addEventListener(evt, (e) => {
-    e.preventDefault();
-    moveNoButton();
-  });
+["pointerenter", "pointerdown", "touchstart"].forEach((evtName) => {
+  noBtn.addEventListener(evtName, moveNoButton, { passive: false });
 });
 
-function explodeHearts() {
-  const rect = questionCard.getBoundingClientRect();
-  for (let i = 0; i < 22; i++) {
+function burstHearts() {
+  const centerX = window.innerWidth / 2;
+  const centerY = window.innerHeight / 2;
+  for (let i = 0; i < 22; i += 1) {
     const p = document.createElement("span");
+    p.className = "burst-heart";
     p.textContent = "💖";
-    p.style.position = "fixed";
-    p.style.left = `${rect.left + rect.width / 2}px`;
-    p.style.top = `${rect.top + rect.height / 2}px`;
-    p.style.fontSize = `${14 + Math.random() * 16}px`;
-    p.style.pointerEvents = "none";
-    p.style.zIndex = 20;
+    p.style.left = `${centerX}px`;
+    p.style.top = `${centerY}px`;
+    p.style.fontSize = `${12 + Math.random() * 14}px`;
+    p.style.zIndex = "30";
     document.body.appendChild(p);
 
     const angle = Math.random() * Math.PI * 2;
-    const dist = 60 + Math.random() * 140;
+    const dist = 55 + Math.random() * 140;
     const tx = Math.cos(angle) * dist;
-    const ty = Math.sin(angle) * dist - 30;
-
+    const ty = Math.sin(angle) * dist;
     p.animate(
       [
-        { transform: "translate(0,0) scale(1)", opacity: 1 },
-        { transform: `translate(${tx}px, ${ty}px) scale(1.3)`, opacity: 0 }
+        { transform: "translate(-50%, -50%) scale(1)", opacity: 1 },
+        { transform: `translate(calc(-50% + ${tx}px), calc(-50% + ${ty}px)) scale(1.2)`, opacity: 0 }
       ],
-      { duration: 1200 + Math.random() * 500, easing: "cubic-bezier(.2,.7,.25,1)", fill: "forwards" }
+      { duration: 900 + Math.random() * 500, easing: "ease-out", fill: "forwards" }
     );
-
-    setTimeout(() => p.remove(), 1900);
+    setTimeout(() => p.remove(), 1500);
   }
 }
 
+openGiftBtn.addEventListener("click", () => {
+  openGiftBtn.style.display = "none";
+  giftContent.classList.add("revealed");
+  giftContent.setAttribute("aria-hidden", "false");
+});
+
 yesBtn.addEventListener("click", () => {
   resultText.textContent = "Anh biết mà 💖";
-  heartStage.classList.remove("boost");
-  void heartStage.offsetWidth;
-  heartStage.classList.add("boost");
-  explodeHearts();
-
-  for (let i = 0; i < 8; i++) {
-    setTimeout(() => {
-      const heart = document.createElement("span");
-      heart.className = "mini-heart";
-      heart.textContent = "💗";
-      heart.style.left = `${40 + Math.random() * 20}%`;
-      heart.style.top = `${58 + Math.random() * 20}%`;
-      heart.style.setProperty("--size", `${16 + Math.random() * 14}px`);
-      heart.style.setProperty("--dur", `${4 + Math.random() * 4}s`);
-      heartsLayer.appendChild(heart);
-      setTimeout(() => heart.remove(), 8000);
-    }, i * 120);
-  }
+  heartWrapper.classList.remove("boost");
+  void heartWrapper.offsetWidth;
+  heartWrapper.classList.add("boost");
+  burstHearts();
 });
 
 makeStars();

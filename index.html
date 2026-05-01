@@ -7,7 +7,6 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- Decorative background particles and sparkles -->
   <div class="particles" id="particles"></div>
   <div class="sparkles" id="sparkles"></div>
 
@@ -16,18 +15,22 @@
 
     <div class="controls">
       <button id="giftBtn" class="btn">Open Gift</button>
-      <button id="musicBtn" class="btn" aria-pressed="false">Play Music</button>
     </div>
 
-    <!-- Heart is hidden until user opens gift -->
     <section id="heartSection" class="heart-section hidden" aria-live="polite">
       <div class="heart-glow"></div>
-      <div class="heart"></div>
+      <div class="heart" aria-hidden="true"></div>
+
+      <div class="question-wrap" id="questionWrap">
+        <p class="question-text">Em có yêu anh không?</p>
+        <div class="answer-buttons" id="answerButtons">
+          <button id="yesBtn" class="btn btn-yes">Có</button>
+          <button id="noBtn" class="btn btn-no">Không</button>
+        </div>
+        <p id="successMessage" class="success-message" role="status" aria-live="polite"></p>
+      </div>
     </section>
   </main>
-
-  <!-- Relative path audio file -->
-  <audio id="bgMusic" src="assets/music.mp3" loop preload="auto"></audio>
 
   <script src="script.js"></script>
 </body>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Neon Heart Love</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Decorative background particles and sparkles -->
+  <div class="particles" id="particles"></div>
+  <div class="sparkles" id="sparkles"></div>
+
+  <main class="container">
+    <h1 class="title">Gui em Mo cua anh 💖</h1>
+
+    <div class="controls">
+      <button id="giftBtn" class="btn">Open Gift</button>
+      <button id="musicBtn" class="btn" aria-pressed="false">Play Music</button>
+    </div>
+
+    <!-- Heart is hidden until user opens gift -->
+    <section id="heartSection" class="heart-section hidden" aria-live="polite">
+      <div class="heart-glow"></div>
+      <div class="heart"></div>
+    </section>
+  </main>
+
+  <!-- Relative path audio file -->
+  <audio id="bgMusic" src="assets/music.mp3" loop preload="auto"></audio>
+
+  <script src="script.js"></script>
+</body>
+</html>

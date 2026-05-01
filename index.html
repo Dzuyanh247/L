@@ -13,70 +13,71 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div class="sky" aria-hidden="true">
+    <div class="fx-layers" aria-hidden="true">
       <div class="stars-layer" id="starsLayer"></div>
       <div class="hearts-layer" id="heartsLayer"></div>
-      <div class="shooting-layer" id="shootingLayer"></div>
     </div>
 
-    <main class="layout">
-      <header class="hero">
-        <h1>Gửi em Mơ của anh 💖</h1>
-        <div class="divider" aria-hidden="true">
-          <span></span>
-          <i>♡</i>
-          <span></span>
-        </div>
-      </header>
+    <main class="main-container">
+      <h1 class="title">Gửi em Mơ của anh 💖</h1>
 
-      <section class="heart-stage" id="mainHeartStage" aria-hidden="true">
-        <div class="orbit-ring"></div>
-        <svg class="main-heart" viewBox="0 0 512 512" role="img" aria-label="Neon heart">
-          <defs>
-            <linearGradient id="heartFill" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#ffd4f4" />
-              <stop offset="45%" stop-color="#ff5ecf" />
-              <stop offset="100%" stop-color="#ff138f" />
-            </linearGradient>
-            <radialGradient id="heartInner" cx="35%" cy="25%" r="55%">
-              <stop offset="0%" stop-color="#fff3ff" stop-opacity="0.9" />
-              <stop offset="100%" stop-color="#fff3ff" stop-opacity="0" />
-            </radialGradient>
-          </defs>
-          <path
-            class="heart-shape"
-            d="M256 470c-6.8 0-13.3-2.7-18.1-7.5l-152-152C43 267.6 20 231 20 191.7 20 119.2 78.2 61 150.7 61c40.3 0 78.8 18.5 105.3 50.1C282.5 79.5 321 61 361.3 61 433.8 61 492 119.2 492 191.7c0 39.3-23 75.9-65.9 118.8l-152 152a25.6 25.6 0 0 1-18.1 7.5Z"
-          />
-          <path
-            class="heart-highlight"
-            d="M184 148c-22 8-39 28-44 52-4 15 16 21 22 8 7-15 20-27 36-31 18-4 10-35-14-29Z"
-          />
-          <path
-            class="heart-reflect"
-            d="M150 200c0 42 28 78 63 89-23-20-37-46-37-76 0-23 8-44 21-61-28 4-47 23-47 48Z"
-          />
-        </svg>
-      </section>
+      <div class="divider" aria-hidden="true">
+        <span></span>
+        <i>❤</i>
+        <span></span>
+      </div>
 
-      <section class="question-card" id="questionCard">
-        <h2><span>♡</span> Em có yêu anh không? <span>♡</span></h2>
-        <div class="buttons-wrap" id="buttonsWrap">
-          <button class="btn btn-yes" id="yesBtn" type="button">Có</button>
-          <button class="btn btn-no" id="noBtn" type="button">Không</button>
-          <svg class="escape-path" viewBox="0 0 400 90" preserveAspectRatio="none" aria-hidden="true">
-            <path d="M4 47 C 65 8, 130 84, 201 45 S 334 11, 396 44" />
+      <button id="openGiftBtn" class="btn btn-open" type="button">Open Gift 🎁</button>
+
+      <section class="gift-content" id="giftContent" aria-hidden="true">
+        <div class="heart-wrapper" id="heartWrapper">
+          <div class="orbit-ring" aria-hidden="true"></div>
+          <svg class="main-heart" viewBox="0 0 512 512" role="img" aria-label="Neon heart">
+            <defs>
+              <linearGradient id="heartFill" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#ffd2f2" />
+                <stop offset="50%" stop-color="#ff5ec4" />
+                <stop offset="100%" stop-color="#ff198f" />
+              </linearGradient>
+              <filter id="heartGlow" x="-30%" y="-30%" width="160%" height="160%">
+                <feGaussianBlur stdDeviation="5" result="blur" />
+                <feMerge>
+                  <feMergeNode in="blur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
+            <path
+              filter="url(#heartGlow)"
+              d="M256 459c-9 0-17.5-3.5-23.9-9.9l-134.8-135C59.2 276 39 244.8 39 210.4 39 146.5 90.8 95 154.5 95c39.6 0 77.1 20.1 101.5 53.4C280.4 115.1 317.9 95 357.5 95 421.2 95 473 146.5 473 210.4c0 34.4-20.2 65.6-58.3 103.7l-134.8 135A33.8 33.8 0 0 1 256 459Z"
+              fill="url(#heartFill)"
+              stroke="#ffdff8"
+              stroke-width="13"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M176 170c-20 9-33 27-37 48-2 12 13 16 18 7 7-13 17-22 31-27 16-5 7-35-12-28Z"
+              fill="#fff8ff"
+              opacity="0.74"
+            />
           </svg>
         </div>
-        <p class="caption">(Thử bắt được anh đi 😜)</p>
-        <p class="result" id="resultText" aria-live="polite"></p>
+
+        <section class="question-card" id="questionCard">
+          <p class="question-text">Em có yêu anh không?</p>
+          <div class="buttons-row" id="buttonsRow">
+            <button id="yesBtn" class="btn btn-yes" type="button">Có</button>
+            <button id="noBtn" class="btn btn-no" type="button">Không</button>
+          </div>
+          <svg class="dotted-path" viewBox="0 0 440 120" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M16 84 C 84 20, 164 112, 238 66 S 354 40, 424 86" />
+          </svg>
+          <p class="result" id="resultText" aria-live="polite"></p>
+        </section>
+
+        <p class="footer-text">Anh thương em nhiều lắm 💕</p>
       </section>
     </main>
-
-    <footer>
-      <span></span>
-      <p>💗 Anh thương em nhiều lắm 💕</p>
-      <span></span>
-    </footer>
 
     <script src="script.js"></script>
   </body>

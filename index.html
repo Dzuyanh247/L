@@ -1,63 +1,83 @@
 <!DOCTYPE html>
 <html lang="vi">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Neon Heart Love</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <div class="bg-stars" id="bgStars"></div>
-  <div class="rising-hearts" id="risingHearts"></div>
-  <div class="effects-layer" id="effectsLayer"></div>
-
-  <main class="container">
-    <h1 class="title">Gửi em món quà của anh 💖</h1>
-
-    <div class="controls" id="controls">
-      <button id="giftBtn" class="btn">Open Gift</button>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Neon Love</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="sky" aria-hidden="true">
+      <div class="stars-layer" id="starsLayer"></div>
+      <div class="hearts-layer" id="heartsLayer"></div>
+      <div class="shooting-layer" id="shootingLayer"></div>
     </div>
 
-    <section id="heartSection" class="heart-section hidden" aria-live="polite">
-      <div class="heart-wrap" id="heartWrap">
-        <svg class="heart-svg" viewBox="0 0 200 180" aria-hidden="true" role="img">
-          <defs>
-            <linearGradient id="heartGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#ffd2ef" />
-              <stop offset="45%" stop-color="#ff6ec7" />
-              <stop offset="100%" stop-color="#ff2fa6" />
-            </linearGradient>
-            <radialGradient id="heartInnerLight" cx="30%" cy="25%" r="75%">
-              <stop offset="0%" stop-color="rgba(255,255,255,0.78)" />
-              <stop offset="65%" stop-color="rgba(255,255,255,0)" />
-            </radialGradient>
-            <filter id="heartGlow" x="-60%" y="-60%" width="220%" height="220%">
-              <feGaussianBlur stdDeviation="4" result="blur1" />
-              <feGaussianBlur stdDeviation="9" result="blur2" />
-              <feMerge>
-                <feMergeNode in="blur2" />
-                <feMergeNode in="blur1" />
-                <feMergeNode in="SourceGraphic" />
-              </feMerge>
-            </filter>
-          </defs>
-          <path class="heart-path" d="M100 166C95 162 89 156 82 151C63 137 43 121 28 104C13 87 7 67 13 49C18 33 33 21 50 19C67 17 82 26 91 41L100 56L109 41C118 26 133 17 150 19C167 21 182 33 187 49C193 67 187 87 172 104C157 121 137 137 118 151C111 156 105 162 100 166Z" />
-          <path class="heart-highlight" d="M64 58C71 46 84 40 97 41" />
-          <path class="heart-inner-shine" d="M100 166C95 162 89 156 82 151C63 137 43 121 28 104C13 87 7 67 13 49C18 33 33 21 50 19C67 17 82 26 91 41L100 56L109 41C118 26 133 17 150 19C167 21 182 33 187 49C193 67 187 87 172 104C157 121 137 137 118 151C111 156 105 162 100 166Z" />
-        </svg>
-      </div>
-
-      <article class="question-card" id="questionWrap">
-        <p class="question-text">Em có yêu anh không?</p>
-        <div class="answer-buttons" id="answerButtons">
-          <button id="yesBtn" class="btn btn-yes">Có</button>
-          <button id="noBtn" class="btn btn-no">Không</button>
+    <main class="layout">
+      <header class="hero">
+        <h1>Gửi em Mơ của anh 💖</h1>
+        <div class="divider" aria-hidden="true">
+          <span></span>
+          <i>♡</i>
+          <span></span>
         </div>
-        <p id="successMessage" class="success-message" role="status" aria-live="polite"></p>
-      </article>
-    </section>
-  </main>
+      </header>
 
-  <script src="script.js"></script>
-</body>
+      <section class="heart-stage" id="mainHeartStage" aria-hidden="true">
+        <div class="orbit-ring"></div>
+        <svg class="main-heart" viewBox="0 0 512 512" role="img" aria-label="Neon heart">
+          <defs>
+            <linearGradient id="heartFill" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#ffd4f4" />
+              <stop offset="45%" stop-color="#ff5ecf" />
+              <stop offset="100%" stop-color="#ff138f" />
+            </linearGradient>
+            <radialGradient id="heartInner" cx="35%" cy="25%" r="55%">
+              <stop offset="0%" stop-color="#fff3ff" stop-opacity="0.9" />
+              <stop offset="100%" stop-color="#fff3ff" stop-opacity="0" />
+            </radialGradient>
+          </defs>
+          <path
+            class="heart-shape"
+            d="M256 470c-6.8 0-13.3-2.7-18.1-7.5l-152-152C43 267.6 20 231 20 191.7 20 119.2 78.2 61 150.7 61c40.3 0 78.8 18.5 105.3 50.1C282.5 79.5 321 61 361.3 61 433.8 61 492 119.2 492 191.7c0 39.3-23 75.9-65.9 118.8l-152 152a25.6 25.6 0 0 1-18.1 7.5Z"
+          />
+          <path
+            class="heart-highlight"
+            d="M184 148c-22 8-39 28-44 52-4 15 16 21 22 8 7-15 20-27 36-31 18-4 10-35-14-29Z"
+          />
+          <path
+            class="heart-reflect"
+            d="M150 200c0 42 28 78 63 89-23-20-37-46-37-76 0-23 8-44 21-61-28 4-47 23-47 48Z"
+          />
+        </svg>
+      </section>
+
+      <section class="question-card" id="questionCard">
+        <h2><span>♡</span> Em có yêu anh không? <span>♡</span></h2>
+        <div class="buttons-wrap" id="buttonsWrap">
+          <button class="btn btn-yes" id="yesBtn" type="button">Có</button>
+          <button class="btn btn-no" id="noBtn" type="button">Không</button>
+          <svg class="escape-path" viewBox="0 0 400 90" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M4 47 C 65 8, 130 84, 201 45 S 334 11, 396 44" />
+          </svg>
+        </div>
+        <p class="caption">(Thử bắt được anh đi 😜)</p>
+        <p class="result" id="resultText" aria-live="polite"></p>
+      </section>
+    </main>
+
+    <footer>
+      <span></span>
+      <p>💗 Anh thương em nhiều lắm 💕</p>
+      <span></span>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
 </html>

@@ -1,125 +1,134 @@
-const giftBtn = document.getElementById('giftBtn');
-const controls = document.getElementById('controls');
-const heartSection = document.getElementById('heartSection');
-const bgStars = document.getElementById('bgStars');
-const risingHearts = document.getElementById('risingHearts');
-const effectsLayer = document.getElementById('effectsLayer');
-const yesBtn = document.getElementById('yesBtn');
-const noBtn = document.getElementById('noBtn');
-const successMessage = document.getElementById('successMessage');
-const heartWrap = document.getElementById('heartWrap');
+const starsLayer = document.getElementById("starsLayer");
+const heartsLayer = document.getElementById("heartsLayer");
+const shootingLayer = document.getElementById("shootingLayer");
+const noBtn = document.getElementById("noBtn");
+const yesBtn = document.getElementById("yesBtn");
+const resultText = document.getElementById("resultText");
+const heartStage = document.getElementById("mainHeartStage");
+const questionCard = document.getElementById("questionCard");
+const buttonsWrap = document.getElementById("buttonsWrap");
 
-let noBtnReady = false;
-
-function createStars(count = 45) {
-  for (let i = 0; i < count; i += 1) {
-    const star = document.createElement('span');
-    star.className = 'star';
-    star.style.left = `${Math.random() * 100}%`;
-    star.style.top = `${Math.random() * 100}%`;
-    star.style.animationDuration = `${8 + Math.random() * 14}s`;
-    star.style.animationDelay = `${Math.random() * 8}s`;
-    star.style.opacity = `${0.35 + Math.random() * 0.55}`;
-    bgStars.appendChild(star);
+function makeStars(total = 95) {
+  for (let i = 0; i < total; i++) {
+    const s = document.createElement("span");
+    s.className = "star";
+    s.style.left = `${Math.random() * 100}%`;
+    s.style.top = `${Math.random() * 100}%`;
+    s.style.setProperty("--dur", `${2 + Math.random() * 4}s`);
+    starsLayer.appendChild(s);
   }
 }
 
-function emitRisingHeart() {
-  const h = document.createElement('span');
-  h.className = 'rise-heart';
-  h.textContent = Math.random() > 0.4 ? '❤' : '💗';
-  h.style.left = `${5 + Math.random() * 90}%`;
-  h.style.bottom = '-20px';
-  h.style.fontSize = `${0.45 + Math.random() * 0.65}rem`;
-  h.style.animationDuration = `${3.6 + Math.random() * 2.3}s`;
-  risingHearts.appendChild(h);
-  setTimeout(() => h.remove(), 6200);
+function makeFloatingHearts(total = 28) {
+  for (let i = 0; i < total; i++) {
+    const h = document.createElement("span");
+    h.className = "mini-heart";
+    h.textContent = Math.random() > 0.5 ? "❤" : "♥";
+    h.style.left = `${Math.random() * 100}%`;
+    h.style.top = `${75 + Math.random() * 35}%`;
+    h.style.setProperty("--size", `${12 + Math.random() * 16}px`);
+    h.style.setProperty("--dur", `${7 + Math.random() * 10}s`);
+    h.style.animationDelay = `${Math.random() * 9}s`;
+    heartsLayer.appendChild(h);
+  }
 }
 
-function keepInsideViewport(x, y, w, h, margin = 10) {
-  const maxX = Math.max(margin, window.innerWidth - w - margin);
-  const maxY = Math.max(margin, window.innerHeight - h - margin);
-  return {
-    x: Math.min(Math.max(x, margin), maxX),
-    y: Math.min(Math.max(y, margin), maxY),
-  };
+function spawnSpark() {
+  const spark = document.createElement("span");
+  spark.className = "spark";
+  spark.style.left = `${Math.random() * 85}%`;
+  spark.style.top = `${Math.random() * 70}%`;
+  spark.style.setProperty("--len", `${70 + Math.random() * 100}px`);
+  spark.style.setProperty("--dur", `${1.5 + Math.random() * 1.3}s`);
+  spark.style.setProperty("--angle", `${-25 + Math.random() * 18}deg`);
+  shootingLayer.appendChild(spark);
+  setTimeout(() => spark.remove(), 2800);
 }
+
+setInterval(spawnSpark, 1900);
 
 function moveNoButton() {
-  if (!noBtnReady) return;
-  const rect = noBtn.getBoundingClientRect();
-  const targetX = Math.random() * (window.innerWidth - rect.width);
-  const targetY = Math.random() * (window.innerHeight - rect.height);
-  const point = keepInsideViewport(targetX, targetY, rect.width, rect.height, 12);
-  noBtn.style.left = `${point.x}px`;
-  noBtn.style.top = `${point.y}px`;
-}
-
-function parkNoButtonNearCard() {
-  const answerRect = document.getElementById('answerButtons').getBoundingClientRect();
+  const wrapRect = buttonsWrap.getBoundingClientRect();
   const btnRect = noBtn.getBoundingClientRect();
-  const x = answerRect.left + answerRect.width / 2 + 58;
-  const y = answerRect.top + 2;
-  const point = keepInsideViewport(x, y, btnRect.width, btnRect.height, 12);
-  noBtn.style.left = `${point.x}px`;
-  noBtn.style.top = `${point.y}px`;
+  const pad = 8;
+
+  const minX = pad;
+  const maxX = wrapRect.width - btnRect.width - pad;
+  const minY = pad;
+  const maxY = wrapRect.height - btnRect.height - pad;
+
+  const x = Math.max(minX, Math.min(maxX, Math.random() * maxX));
+  const y = Math.max(minY, Math.min(maxY, Math.random() * maxY));
+
+  noBtn.classList.remove("wiggle");
+  void noBtn.offsetWidth;
+  noBtn.classList.add("wiggle");
+
+  setTimeout(() => {
+    noBtn.style.position = "absolute";
+    noBtn.style.left = `${x}px`;
+    noBtn.style.top = `${y}px`;
+  }, 180);
 }
 
-function launchLoveBurst() {
-  const yesRect = yesBtn.getBoundingClientRect();
-  const centerX = yesRect.left + yesRect.width / 2;
-  const centerY = yesRect.top + yesRect.height / 2;
-  const burstCount = 26;
+["mouseenter", "click", "touchstart"].forEach((evt) => {
+  noBtn.addEventListener(evt, (e) => {
+    e.preventDefault();
+    moveNoButton();
+  });
+});
 
-  for (let i = 0; i < burstCount; i += 1) {
-    const item = document.createElement('span');
-    item.className = 'burst-item';
-    item.textContent = Math.random() > 0.35 ? '💖' : (Math.random() > 0.5 ? '✨' : '💗');
-    const spreadX = (Math.random() - 0.5) * 180;
-    const spreadY = (Math.random() - 0.5) * 40;
-    item.style.left = `${centerX + spreadX}px`;
-    item.style.top = `${centerY + spreadY}px`;
-    item.style.animationDelay = `${Math.random() * 0.15}s`;
-    effectsLayer.appendChild(item);
-    setTimeout(() => item.remove(), 1400);
+function explodeHearts() {
+  const rect = questionCard.getBoundingClientRect();
+  for (let i = 0; i < 22; i++) {
+    const p = document.createElement("span");
+    p.textContent = "💖";
+    p.style.position = "fixed";
+    p.style.left = `${rect.left + rect.width / 2}px`;
+    p.style.top = `${rect.top + rect.height / 2}px`;
+    p.style.fontSize = `${14 + Math.random() * 16}px`;
+    p.style.pointerEvents = "none";
+    p.style.zIndex = 20;
+    document.body.appendChild(p);
+
+    const angle = Math.random() * Math.PI * 2;
+    const dist = 60 + Math.random() * 140;
+    const tx = Math.cos(angle) * dist;
+    const ty = Math.sin(angle) * dist - 30;
+
+    p.animate(
+      [
+        { transform: "translate(0,0) scale(1)", opacity: 1 },
+        { transform: `translate(${tx}px, ${ty}px) scale(1.3)`, opacity: 0 }
+      ],
+      { duration: 1200 + Math.random() * 500, easing: "cubic-bezier(.2,.7,.25,1)", fill: "forwards" }
+    );
+
+    setTimeout(() => p.remove(), 1900);
   }
 }
 
-function boostHeart() {
-  const svg = heartWrap.querySelector('.heart-svg');
-  svg.classList.remove('heart-boost');
-  void svg.offsetWidth;
-  svg.classList.add('heart-boost');
-}
+yesBtn.addEventListener("click", () => {
+  resultText.textContent = "Anh biết mà 💖";
+  heartStage.classList.remove("boost");
+  void heartStage.offsetWidth;
+  heartStage.classList.add("boost");
+  explodeHearts();
 
-giftBtn.addEventListener('click', () => {
-  heartSection.classList.remove('hidden');
-  controls.classList.add('hide');
-
-  setTimeout(() => {
-    noBtnReady = true;
-    parkNoButtonNearCard();
-  }, 260);
+  for (let i = 0; i < 8; i++) {
+    setTimeout(() => {
+      const heart = document.createElement("span");
+      heart.className = "mini-heart";
+      heart.textContent = "💗";
+      heart.style.left = `${40 + Math.random() * 20}%`;
+      heart.style.top = `${58 + Math.random() * 20}%`;
+      heart.style.setProperty("--size", `${16 + Math.random() * 14}px`);
+      heart.style.setProperty("--dur", `${4 + Math.random() * 4}s`);
+      heartsLayer.appendChild(heart);
+      setTimeout(() => heart.remove(), 8000);
+    }, i * 120);
+  }
 });
 
-yesBtn.addEventListener('click', () => {
-  successMessage.textContent = 'Anh biết mà 💖';
-  successMessage.classList.add('show');
-  launchLoveBurst();
-  boostHeart();
-});
-
-['pointerenter', 'pointerdown', 'click', 'touchstart'].forEach((eventName) => {
-  noBtn.addEventListener(eventName, (event) => {
-    if (!noBtnReady) return;
-    event.preventDefault();
-    moveNoButton();
-  }, { passive: false });
-});
-
-window.addEventListener('resize', () => {
-  if (noBtnReady) moveNoButton();
-});
-
-createStars();
-setInterval(emitRisingHeart, 680);
+makeStars();
+makeFloatingHearts();
